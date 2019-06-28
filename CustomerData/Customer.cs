@@ -12,7 +12,7 @@ namespace CustomerData
         decimal kwh2;
         decimal customerCharge;
 
-        // public properties
+        // public properties get/set
         public int AccountNo
         {
             get
@@ -63,6 +63,7 @@ namespace CustomerData
 
         public Customer() { }
 
+        // customer constructor
         public Customer(int accountNo, string customerName, char customerType, decimal kwh1, decimal kwh2 = 0)
         {
             this.accountNo = accountNo;
@@ -70,11 +71,14 @@ namespace CustomerData
             this.customerType = customerType;
             this.kwh1 = kwh1;
             this.kwh2 = kwh2;
+            // calculate charge passed to variable for this customer
             CustomerCharge = CalculateCharge();
         }
 
+        // calculate customer charge
         public virtual decimal CalculateCharge()
         {
+            // customer charge passed to customer type objects
             if(this.customerType == 'R')
             {
                 Customer c = new ResidentialCustomer(accountNo, customerName, customerType, kwh1, kwh2);
@@ -93,7 +97,7 @@ namespace CustomerData
             return 0;
         }
 
-        // tostring method
+        // tostring method to display customer
         public override string ToString()
         {
             return accountNo.ToString() + "\t" + customerName + "\t" + customerType + "\t" + CustomerCharge.ToString("C");

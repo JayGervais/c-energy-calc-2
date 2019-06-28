@@ -8,8 +8,10 @@ namespace CustomerData
 
     public static class CustomerDB
     {
+        // path to customer text file
         const string path = "Customers.txt";
 
+        // customer list for reading data
         public static List<Customer> ReadCustomers()
         {
             // create an empty customer list
@@ -49,6 +51,7 @@ namespace CustomerData
             return customerList;
         }
 
+        // public method for saving customer data to list
         public static void SaveCustomers(List<Customer> list)
         {
             FileStream fs = null;

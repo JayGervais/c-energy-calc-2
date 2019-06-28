@@ -10,6 +10,7 @@ namespace CustomerData
         const decimal KWH_COMM_BASE_PRICE = 60.00m;     // commercial flat rate
         const decimal BASE_HOURS = 1000m;               // base hours used to determine calculations
 
+        // commercial customer constructor
         public CommercialCustomer(int accountNo, string customerName, char customerType, decimal kwh1, decimal kwh2) : base(accountNo, customerName, customerType, kwh1, kwh2)
         {
             this.AccountNo = AccountNo;
@@ -19,6 +20,7 @@ namespace CustomerData
             this.Kwh2 = Kwh2;
         }
 
+        // create new residential commerical method
         public CommercialCustomer(Customer c)
         {
             this.AccountNo = c.AccountNo;
@@ -29,11 +31,13 @@ namespace CustomerData
             CustomerCharge = CalculateCharge();
         }
 
+        // tostring override method to display commercial customer data
         public override string ToString()
         {
             return AccountNo + "\t" + CustomerName + "\t" + CustomerType + "\t" + CustomerCharge.ToString("C");
         }
 
+        // commercial calculation override
         public override decimal CalculateCharge()
         {
             if (Kwh1 > BASE_HOURS)

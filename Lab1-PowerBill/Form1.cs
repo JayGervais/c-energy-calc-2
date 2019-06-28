@@ -22,12 +22,14 @@ namespace Lab1_PowerBill
 {
     public partial class powerBillForm : Form
     {
-        private decimal kwh1;
-        private decimal kwh2;
-        private int accountNo;
-        private string customerName;
-        private char customerType;
+        // declaring customer variables
+        private decimal kwh1; // kwh used/peak hours
+        private decimal kwh2; // off-peak hours
+        private int accountNo; // customer account number
+        private string customerName; // customer name
+        private char customerType; // customer type (residential, commercial, industrial)
 
+        // declare customer list
         List<Customer> myCustomers;
 
         public powerBillForm()
@@ -37,7 +39,7 @@ namespace Lab1_PowerBill
 
         // combo box that selects customer type
         private void CboxCustType_SelectedIndexChanged(object sender, EventArgs e)
-        // forms are hidden or displayed based on customer chosen
+        // forms are hidden or displayed based on customer type
         {
             switch (cboxCustType.SelectedIndex)
             {
@@ -59,9 +61,8 @@ namespace Lab1_PowerBill
             }
         }
 
-        // displays residential form and activates input upon form load
         private void PowerBillForm_Load(object sender, EventArgs e)
-        {
+        {   // displays residential form and activates input upon form load
             myCustomers = CustomerDB.ReadCustomers();
             DisplayCustomers();
 
@@ -72,24 +73,26 @@ namespace Lab1_PowerBill
         }
 
         private void DisplayCustomers()
-        {
+        {   // displays all customers
             lstCustomer.Items.Clear(); // empty the list box
+            // loop through all customers in list
             foreach (Customer c in myCustomers)
                 lstCustomer.Items.Add(c);
-            // display totals
-            txtCustomerTotal.Text = myCustomers.Count.ToString();
-            txtTotalCharges.Text = CalculateCustomerTotal().ToString("C");
-            txtResTotal.Text = CalculateResidential().ToString("C");
-            txtCommTotal.Text = CalculateCommercial().ToString("C");
-            txtIndustTotal.Text = CalculateIndustrial().ToString("C");
+            // display total amounts
+            txtCustomerTotal.Text = myCustomers.Count.ToString(); // number of customers
+            txtTotalCharges.Text = CalculateCustomerTotal().ToString("C"); // total charges
+            txtResTotal.Text = CustomerTypeCalc('R').ToString("C"); // residential total
+            txtCommTotal.Text = CustomerTypeCalc('C').ToString("C"); // commercial total
+            txtIndustTotal.Text = CustomerTypeCalc('I').ToString("C"); // industrial total
         }
 
         private void BtnCalculate_Click(object sender, EventArgs e)
-        {
+        {   // create new customer type based on selection
             switch (cboxCustType.SelectedIndex)
             {
                 case 0: // residential
 
+                    // set customer type
                     customerType = 'R';
                     this.ActiveControl = txtCustName;
 
@@ -104,11 +107,12 @@ namespace Lab1_PowerBill
                         Validator.IsInteger(txtKwhUsed, "kWh") &&
                         Validator.IsNonNegativeInt(txtKwhUsed, "kWh"))
                     {
+                        // set text values to customer variables
                         kwh1 = Convert.ToDecimal(txtKwhUsed.Text);
                         accountNo = Convert.ToInt32(txtAcctNum.Text);
                         customerName = Convert.ToString(txtCustName.Text);
-
-                        ResidentialCustomer newResCust = new ResidentialCustomer(accountNo, customerName, customerType, kwh1, kwh2=0); // create new customer
+                        // create new customer object
+                        ResidentialCustomer newResCust = new ResidentialCustomer(accountNo, customerName, customerType, kwh1, kwh2=0);
                         myCustomers.Add(newResCust); // add to list
                         CustomerDB.SaveCustomers(myCustomers);
                         DisplayCustomers();
@@ -117,6 +121,7 @@ namespace Lab1_PowerBill
                     break;
                 case 1: //commercial
 
+                    // set customer type
                     customerType = 'C';
                     this.ActiveControl = txtCustName;
 
@@ -131,11 +136,12 @@ namespace Lab1_PowerBill
                         Validator.IsInteger(txtKwhUsed, "kWh") &&
                         Validator.IsNonNegativeInt(txtKwhUsed, "kWh"))
                     {
+                        // set text values to customer variables
                         kwh1 = Convert.ToDecimal(txtKwhUsed.Text);
                         accountNo = Convert.ToInt32(txtAcctNum.Text);
                         customerName = Convert.ToString(txtCustName.Text);
-
-                        CommercialCustomer newComCust = new CommercialCustomer(accountNo, customerName, customerType, kwh1, kwh2 = 0); // create new customer
+                        // create new customer object
+                        CommercialCustomer newComCust = new CommercialCustomer(accountNo, customerName, customerType, kwh1, kwh2 = 0);
                         myCustomers.Add(newComCust); // add to list
                         CustomerDB.SaveCustomers(myCustomers);
                         DisplayCustomers();
@@ -144,6 +150,7 @@ namespace Lab1_PowerBill
                     break;
                 case 2: // industrial
 
+                    // set customer type
                     customerType = 'I';
                     this.ActiveControl = txtCustName;
   
@@ -162,12 +169,13 @@ namespace Lab1_PowerBill
                         Validator.IsInteger(txtOffPeakHours, "Off-Peak Hours") &&
                         Validator.IsNonNegativeInt(txtOffPeakHours, "Off-Peak Hours"))
                     {
+                        // set text values to customer variables
                         kwh1 = Convert.ToDecimal(txtPeakHours.Text);
                         kwh2 = Convert.ToDecimal(txtOffPeakHours.Text);
                         accountNo = Convert.ToInt32(txtAcctNum.Text);
                         customerName = Convert.ToString(txtCustName.Text);
-
-                        IndustrialCustomer newIndusCust = new IndustrialCustomer(accountNo, customerName, customerType, kwh1, kwh2); // create new customer
+                        // create new customer object
+                        IndustrialCustomer newIndusCust = new IndustrialCustomer(accountNo, customerName, customerType, kwh1, kwh2);
                         myCustomers.Add(newIndusCust); // add to list       
                         CustomerDB.SaveCustomers(myCustomers);
                         DisplayCustomers();
@@ -177,6 +185,7 @@ namespace Lab1_PowerBill
             }
         }
 
+        // display total for all customers
         private decimal CalculateCustomerTotal()
         {
             decimal total = 0;
@@ -187,30 +196,10 @@ namespace Lab1_PowerBill
             return total;
         }
 
-        private decimal CalculateResidential()
+        private decimal CustomerTypeCalc(char type)
         {
             decimal total = 0;
-            foreach (Customer c in myCustomers.Where(Customer => Customer.CustomerType == 'R'))
-            {
-                total += c.CustomerCharge;
-            }
-            return total;
-        }
-
-        private decimal CalculateCommercial()
-        {
-            decimal total = 0;
-            foreach (Customer c in myCustomers.Where(Customer => Customer.CustomerType == 'C'))
-            {
-                total += c.CustomerCharge;
-            }
-            return total;
-        }
-
-        private decimal CalculateIndustrial()
-        {
-            decimal total = 0;
-            foreach (Customer c in myCustomers.Where(Customer => Customer.CustomerType == 'I'))
+            foreach (Customer c in myCustomers.Where(Customer => Customer.CustomerType == type))
             {
                 total += c.CustomerCharge;
             }
@@ -246,18 +235,14 @@ namespace Lab1_PowerBill
             {
                 // identify customer to remove
                 int index = lstCustomer.SelectedIndex; // position (in the list) of product to remove
-
                 // confirm removal
                 DialogResult answer = MessageBox.Show("Are you sure you want to remove customer " + myCustomers[index].CustomerName + "?", "Please confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
                 // if yes, remove product
                 if (answer == DialogResult.Yes)
                 {
                     myCustomers.RemoveAt(index); // remove selected object at index
-
                     // write products to the file
                     CustomerDB.SaveCustomers(myCustomers); // save to the file
-
                     // re-display customers
                     DisplayCustomers();
                 }

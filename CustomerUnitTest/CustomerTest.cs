@@ -11,7 +11,8 @@ namespace CustomerUnitTest
     [TestClass()]
     public class CustomerTest
     {
-        [TestMethod()]
+        [TestMethod()] 
+        // testing that zero value is being added for KWH2 for residential calculations
         public void ResidentialKWH2ZeroValue()
         {
             int acctnum = 1111;
@@ -26,6 +27,7 @@ namespace CustomerUnitTest
         }
 
         [TestMethod()]
+        // testing that zero value is being added for KWH2 for industrial calculations
         public void IndustrialKWH2ZeroValue()
         {
             int acctnum = 1111;
@@ -40,6 +42,7 @@ namespace CustomerUnitTest
         }
 
         [TestMethod()]
+        // testing expected value for residential calculation
         public void ResidentialCalcValue()
         {
             int acctnum = 1111;
@@ -57,6 +60,7 @@ namespace CustomerUnitTest
         }
 
         [TestMethod()]
+        // testing calculation expected value for residential when KWH is zero
         public void ResidentialCalcZero()
         {
             int acctnum = 1111;
@@ -74,6 +78,7 @@ namespace CustomerUnitTest
         }
 
         [TestMethod()]
+        // testing expected value for commercial calculation
         public void CommercialCalcValue()
         {
             int acctnum = 1111;
@@ -91,6 +96,7 @@ namespace CustomerUnitTest
         }
 
         [TestMethod()]
+        // testing expected value for commercial when KWH is zero
         public void CommercialCalcZero()
         {
             int acctnum = 1111;
@@ -108,6 +114,7 @@ namespace CustomerUnitTest
         }
 
         [TestMethod()]
+        // testing expected value for industrial calculation
         public void IndustCalcValue()
         {
             int acctnum = 1111;
@@ -125,6 +132,7 @@ namespace CustomerUnitTest
         }
 
         [TestMethod()]
+        // testing  expected value for commercial when KWH1 and KWH2 is zero
         public void IndustCalcZero()
         {
             int acctnum = 1111;
@@ -142,6 +150,7 @@ namespace CustomerUnitTest
         }
 
         [TestMethod()]
+        // testing calculation expected value for industrial when KWH1 is zero
         public void IndustCalcKWH1Zero()
         {
             int acctnum = 1111;
@@ -159,6 +168,7 @@ namespace CustomerUnitTest
         }
 
         [TestMethod()]
+        // testing calculation expected value for industrial when KWH2 is zero
         public void IndustCalcKWH2Zero()
         {
             int acctnum = 1111;

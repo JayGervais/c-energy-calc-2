@@ -12,7 +12,8 @@ namespace CustomerData
         const decimal KWH_OFF_PEAK_BASE_PRICE = 40.00m; // industrial off-peak hour base charge
         const decimal INDUST_BASE_HOURS = 1000m;        // base hours used to determine calculations
 
-        public IndustrialCustomer(int accountNo, string customerName, char customerType, decimal kwh1, decimal kwh2 = 0) : base(accountNo, customerName, customerType, kwh1, kwh2)
+        // industrial customer constructor
+        public IndustrialCustomer(int accountNo, string customerName, char customerType, decimal kwh1, decimal kwh2) : base(accountNo, customerName, customerType, kwh1, kwh2)
         {
             this.AccountNo = AccountNo;
             this.CustomerName = CustomerName;
@@ -21,6 +22,7 @@ namespace CustomerData
             this.Kwh2 = Kwh2;
         }
 
+        // create new industrial customer method
         public IndustrialCustomer(Customer c)
         {
             this.AccountNo = c.AccountNo;
@@ -31,11 +33,13 @@ namespace CustomerData
             CustomerCharge = CalculateCharge();
         }
 
+        // tostring override method to display industrial customer data
         public override string ToString()
         {
             return AccountNo + "\t" + CustomerName + "\t" + CustomerType + "\t" + CustomerCharge.ToString("C");
         }
 
+        // industrial calculation override
         public override decimal CalculateCharge()
         {
             decimal peak;
